@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoanEX — Study now. Pay when you qualify.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16233F; --ink-soft:#3D4A66;
+    --paper:#ECE3CE; --paper-dim:#E3D9C0;
+    --navy-deep:#0F1B33; --navy-deeper:#0B1425;
+    --cream-text:#F3ECDA; --cream-text-dim:#C9C2AC;
+    --gold:#B8872F; --gold-light:#D6AC5C;
+    --maroon:#7A2331; --maroon-dark:#5E1A24;
+    --green:#3F6B3F;
+    --line: rgba(22,35,63,0.22); --line-dark: rgba(243,236,218,0.22);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--ink);letter-spacing:-0.01em;}
+  p{margin:0;} a{color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+  button{font-family:inherit;}
+
+  header.nav{position:sticky;top:0;z-index:50;background:rgba(236,227,206,0.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:1.35rem;display:flex;align-items:baseline;gap:2px;cursor:pointer;}
+  .logo .r{color:var(--maroon);}
+  .nav-links{display:flex;gap:28px;font-size:0.94rem;align-items:center;}
+  .nav-links a{text-decoration:none;color:var(--ink-soft);border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .15s ease,color .15s ease;cursor:pointer;}
+  .nav-links a:hover{color:var(--ink);border-color:var(--maroon);}
+  .nav-cta{font-size:0.9rem;font-weight:500;text-decoration:none;background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:2px;transition:background .15s ease;cursor:pointer;border:none;}
+  .nav-cta:hover{background:var(--maroon);}
+  @media (max-width:820px){.nav-links a:not(.portal-link){display:none;}}
+
+  .hero{padding:76px 0 96px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:56px;}}
+  .hero h1{font-size:clamp(2.3rem,4.4vw,3.4rem);line-height:1.08;max-width:13ch;}
+  .hero p.lede{margin-top:22px;max-width:44ch;font-size:1.08rem;color:var(--ink-soft);}
+  .hero-actions{display:flex;align-items:center;gap:26px;margin-top:34px;flex-wrap:wrap;}
+  .btn-primary{background:var(--maroon);color:var(--cream-text);text-decoration:none;padding:14px 26px;border-radius:2px;font-weight:500;font-size:0.98rem;border:1px solid var(--maroon);transition:background .15s ease,color .15s ease;cursor:pointer;display:inline-block;}
+  .btn-primary:hover{background:transparent;color:var(--maroon);}
+  .link-quiet{text-decoration:none;font-size:0.95rem;color:var(--ink-soft);border-bottom:1px solid var(--line);cursor:pointer;}
+  .link-quiet:hover{color:var(--ink);}
+
+  .certificate{position:relative;background:var(--navy-deep);color:var(--cream-text);border:1px solid var(--gold);padding:34px 32px 30px;font-family:'IBM Plex Mono',monospace;box-shadow:6px 6px 0 rgba(22,35,63,0.15);}
+  .certificate::before{content:"";position:absolute;inset:8px;border:1px solid rgba(214,172,92,0.4);pointer-events:none;}
+  .cert-top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line-dark);padding-bottom:14px;margin-bottom:18px;font-size:0.78rem;letter-spacing:0.02em;color:var(--cream-text-dim);}
+  .cert-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line-dark);font-size:0.86rem;}
+  .cert-row:last-of-type{border-bottom:none;}
+  .cert-row span:first-child{color:var(--cream-text-dim);}
+  .cert-row span:last-child{text-align:right;}
+  .cert-amount{font-size:1.5rem;color:var(--gold-light);font-family:'Fraunces',serif;font-weight:600;}
+  .seal{position:absolute;top:-16px;right:22px;width:78px;height:78px;border-radius:50%;border:2px solid var(--gold-light);display:flex;align-items:center;justify-content:center;transform:rotate(-9deg);background:var(--navy-deeper);font-family:'Fraunces',serif;font-weight:600;font-size:0.72rem;text-align:center;line-height:1.15;color:var(--gold-light);box-shadow:0 4px 10px rgba(0,0,0,0.35);}
+
+  section{padding:88px 0;border-top:1px solid var(--line);}
+  .section-head{max-width:56ch;margin-bottom:52px;}
+  .section-head h2{font-size:clamp(1.6rem,2.6vw,2.15rem);}
+  .section-head p{margin-top:14px;color:var(--ink-soft);font-size:1.02rem;}
+
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+  @media (max-width:860px){.steps{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.steps{grid-template-columns:1fr;}}
+  .step{padding:26px 26px 0 0;border-left:1px solid var(--line);padding-left:24px;}
+  .step:first-child{border-left:none;padding-left:0;}
+  @media (max-width:860px){.step{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:26px;}.step:first-child{border-top:none;}}
+  .step-num{font-family:'Fraunces',serif;font-size:1rem;color:var(--maroon);font-weight:600;}
+  .step h3{font-size:1.12rem;margin-top:10px;}
+  .step p{margin-top:10px;color:var(--ink-soft);font-size:0.95rem;}
+
+  .calc-panel{background:var(--paper-dim);border:1px solid var(--line);padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  @media (max-width:800px){.calc-panel{grid-template-columns:1fr;padding:28px;gap:32px;}}
+  .field{margin-bottom:30px;} .field:last-child{margin-bottom:0;}
+  .field-label{display:flex;justify-content:space-between;font-size:0.92rem;margin-bottom:12px;}
+  .field-label strong{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;}
+  input[type=range]{-webkit-appearance:none;width:100%;height:2px;background:var(--ink);outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--maroon);cursor:pointer;border:2px solid var(--paper);box-shadow:0 0 0 1px var(--maroon);}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--maroon);cursor:pointer;border:2px solid var(--paper);}
+  .calc-result{background:var(--navy-deep);color:var(--cream-text);padding:30px;display:flex;flex-direction:column;justify-content:center;}
+  .calc-result .label{font-size:0.85rem;color:var(--cream-text-dim);}
+  .calc-result .value{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;color:var(--gold-light);margin-top:8px;}
+  .calc-result .sub{margin-top:18px;font-size:0.85rem;color:var(--cream-text-dim);border-top:1px solid var(--line-dark);padding-top:16px;}
+  .calc-note{margin-top:26px;font-size:0.82rem;color:var(--ink-soft);}
+
+  .stats-section{background:var(--navy-deep);color:var(--cream-text);border-top:none;}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;}
+  @media (max-width:700px){.stats-grid{grid-template-columns:1fr;gap:32px;}}
+  .stat .value{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold-light);}
+  .stat .label{margin-top:8px;color:var(--cream-text-dim);font-size:0.95rem;}
+
+  .testimonial{max-width:64ch;}
+  .testimonial blockquote{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;line-height:1.4;margin:0;color:var(--ink);}
+  .testimonial cite{display:block;margin-top:20px;font-style:normal;color:var(--ink-soft);font-size:0.92rem;}
+
+  .faq-list{border-top:1px solid var(--line);}
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;align-items:center;font-family:'Fraunces',serif;font-size:1.08rem;color:var(--ink);font-weight:500;}
+  .faq-q .plus{font-family:'IBM Plex Mono',monospace;font-size:1.2rem;color:var(--maroon);transition:transform .2s ease;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .faq-a-inner{padding-bottom:22px;color:var(--ink-soft);max-width:60ch;font-size:0.96rem;}
+  .faq-item.open .faq-a{max-height:220px;}
+
+  /* Application form */
+  .apply-section{background:var(--maroon);color:var(--cream-text);border-top:none;}
+  .apply-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:start;}
+  @media (max-width:860px){.apply-grid{grid-template-columns:1fr;gap:36px;}}
+  .apply-grid h2{color:var(--cream-text);font-size:clamp(1.7rem,3vw,2.3rem);max-width:14ch;}
+  .apply-grid p{margin-top:16px;color:rgba(243,236,218,0.82);max-width:38ch;}
+  form.apply-form{display:flex;flex-direction:column;gap:16px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:520px){.form-row{grid-template-columns:1fr;}}
+  .apply-form input, .apply-form select{background:transparent;border:none;border-bottom:1px solid rgba(243,236,218,0.4);color:var(--cream-text);padding:12px 2px;font-family:'IBM Plex Sans',sans-serif;font-size:0.98rem;outline:none;width:100%;}
+  .apply-form input::placeholder{color:rgba(243,236,218,0.5);}
+  .apply-form input:focus, .apply-form select:focus{border-bottom-color:var(--gold-light);}
+  .apply-form select option{color:var(--ink);}
+  .upload-box{border:1px dashed rgba(243,236,218,0.45);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;}
+  .upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+  .upload-thumb{width:48px;height:48px;object-fit:cover;border:1px solid var(--gold-light);flex-shrink:0;background:var(--navy-deep);}
+  .upload-placeholder{width:48px;height:48px;border:1px dashed rgba(243,236,218,0.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:rgba(243,236,218,0.5);}
+  .upload-text{font-size:0.86rem;color:rgba(243,236,218,0.8);}
+  .upload-text strong{display:block;font-size:0.94rem;color:var(--cream-text);font-weight:500;}
+  .apply-form button{margin-top:10px;align-self:flex-start;background:var(--paper);color:var(--maroon);border:none;padding:14px 28px;font-weight:600;font-size:0.98rem;cursor:pointer;border-radius:2px;transition:background .15s ease;}
+  .apply-form button:hover{background:var(--gold-light);color:var(--navy-deeper);}
+  .apply-form button:disabled{opacity:0.6;cursor:wait;}
+  .form-note{font-size:0.8rem;color:rgba(243,236,218,0.6);margin-top:4px;}
+  .confirm-box{background:rgba(243,236,218,0.1);border:1px solid var(--gold-light);padding:20px;font-family:'IBM Plex Mono',monospace;font-size:0.9rem;}
+  .confirm-box strong{color:var(--gold-light);}
+
+  footer{background:var(--navy-deeper);color:var(--cream-text-dim);padding:40px 0;font-size:0.85rem;}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  footer a{text-decoration:none;color:var(--cream-text-dim);cursor:pointer;}
+  footer a:hover{color:var(--cream-text);}
+  .footer-links{display:flex;gap:22px;}
+
+  /* Portal */
+  #portalView{display:none;min-height:100vh;background:var(--navy-deeper);color:var(--cream-text);}
+  .portal-header{border-bottom:1px solid var(--line-dark);padding:20px 0;}
+  .portal-header .wrap{display:flex;justify-content:space-between;align-items:center;}
+  .portal-login{max-width:440px;margin:100px auto;padding:0 24px;}
+  .portal-login h2{color:var(--cream-text);font-size:1.7rem;}
+  .portal-login p{color:var(--cream-text-dim);margin-top:10px;font-size:0.95rem;}
+  .stakeholder-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;}
+  .stakeholder-btn{background:rgba(243,236,218,0.06);border:1px solid var(--line-dark);color:var(--cream-text);padding:16px;text-align:left;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:0.95rem;transition:border-color .15s ease,background .15s ease;}
+  .stakeholder-btn:hover{border-color:var(--gold-light);background:rgba(243,236,218,0.1);}
+  .stakeholder-btn.selected{border-color:var(--gold-light);background:rgba(214,172,92,0.14);}
+  .pin-row{margin-top:24px;display:none;}
+  .pin-row.show{display:block;}
+  .pin-row input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(243,236,218,0.4);color:var(--cream-text);padding:12px 2px;font-size:1.4rem;letter-spacing:0.3em;outline:none;font-family:'IBM Plex Mono',monospace;}
+  .pin-row input:focus{border-bottom-color:var(--gold-light);}
+  .pin-error{color:#D68C8C;font-size:0.85rem;margin-top:10px;display:none;}
+  .portal-login-btn{margin-top:24px;background:var(--gold-light);color:var(--navy-deeper);border:none;padding:14px 26px;font-weight:600;font-size:0.98rem;cursor:pointer;border-radius:2px;}
+
+  .portal-body{padding:44px 0 80px;}
+  .portal-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-bottom:48px;}
+  @media (max-width:800px){.portal-summary{grid-template-columns:1fr 1fr;}}
+  .summary-cell{background:var(--navy-deeper);padding:24px;}
+  .summary-cell .label{font-size:0.82rem;color:var(--cream-text-dim);}
+  .summary-cell .value{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:600;margin-top:8px;color:var(--gold-light);}
+
+  .portal-grid{display:grid;grid-template-columns:1.1fr 1.4fr;gap:48px;align-items:start;}
+  @media (max-width:960px){.portal-grid{grid-template-columns:1fr;}}
+  .panel{border:1px solid var(--line-dark);padding:28px;}
+  .panel h3{font-size:1.1rem;color:var(--cream-text);margin-bottom:20px;}
+  .ledger-form{display:flex;flex-direction:column;gap:14px;}
+  .ledger-form label{font-size:0.82rem;color:var(--cream-text-dim);display:block;margin-bottom:6px;}
+  .ledger-form input, .ledger-form select, .ledger-form textarea{width:100%;background:rgba(243,236,218,0.05);border:1px solid var(--line-dark);color:var(--cream-text);padding:10px;font-family:'IBM Plex Sans',sans-serif;font-size:0.92rem;outline:none;}
+  .ledger-form select option{color:var(--ink);}
+  .ledger-form button{margin-top:6px;background:var(--gold-light);color:var(--navy-deeper);border:none;padding:12px 20px;font-weight:600;cursor:pointer;font-size:0.92rem;}
+  .ledger-form button:disabled{opacity:0.6;cursor:wait;}
+
+  table.ledger-table{width:100%;border-collapse:collapse;font-size:0.86rem;}
+  table.ledger-table th{text-align:left;color:var(--cream-text-dim);font-weight:500;padding:8px 6px;border-bottom:1px solid var(--line-dark);font-size:0.78rem;}
+  table.ledger-table td{padding:10px 6px;border-bottom:1px solid rgba(243,236,218,0.08);}
+  .tag{padding:3px 8px;font-size:0.72rem;border-radius:2px;}
+  .tag.disb{background:rgba(122,35,49,0.35);color:#E8B4BC;}
+  .tag.repay{background:rgba(63,107,63,0.35);color:#A9D4A9;}
+  .empty-row{color:var(--cream-text-dim);font-size:0.88rem;padding:16px 0;}
+
+  .app-card{border:1px solid var(--line-dark);padding:18px;margin-bottom:14px;}
+  .app-card-top{display:flex;justify-content:space-between;align-items:baseline;}
+  .app-card-top strong{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--cream-text);}
+  .app-card-meta{font-size:0.82rem;color:var(--cream-text-dim);margin-top:6px;}
+  .app-card-docs{display:flex;gap:10px;margin-top:14px;}
+  .app-card-docs img{width:70px;height:70px;object-fit:cover;border:1px solid var(--gold-light);cursor:pointer;}
+  .doc-missing{width:70px;height:70px;border:1px dashed var(--line-dark);display:flex;align-items:center;justify-content:center;font-size:0.68rem;color:var(--cream-text-dim);text-align:center;}
+
+  .lightbox{position:fixed;inset:0;background:rgba(11,20,37,0.92);display:none;align-items:center;justify-content:center;z-index:200;cursor:zoom-out;}
+  .lightbox.show{display:flex;}
+  .lightbox img{max-width:88vw;max-height:88vh;border:2px solid var(--gold-light);}
+
+  :focus-visible{outline:2px solid var(--maroon);outline-offset:2px;}
+  #portalView :focus-visible{outline-color:var(--gold-light);}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important;}}
+</style>
+</head>
+<body>
+
+<div id="siteView">
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Loan<span class="r">EX</span></div>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#calculate">Calculate</a>
+      <a href="#faq">FAQ</a>
+      <a class="portal-link" onclick="openPortal()">Stakeholder Portal</a>
+    </nav>
+    <a href="#apply" class="nav-cta">Apply</a>
+  </div>
+</header>
+
+<section class="hero" style="border-top:none;padding-top:64px;">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Study now.<br>Pay when you qualify.</h1>
+      <p class="lede">LoanEX funds short-term top-up loans for students, from R100 to R1,500, repayable over 3 months. Simple terms, fast payout, no collateral.</p>
+      <div class="hero-actions">
+        <a href="#apply" class="btn-primary">Start your application</a>
+        <a href="#how" class="link-quiet">See how repayment works</a>
+      </div>
+    </div>
+    <div class="certificate">
+      <div class="seal">APPROVED<br>LoanEX</div>
+      <div class="cert-top"><span>LoanEX — Loan Certificate</span><span>No. 004821</span></div>
+      <div class="cert-row"><span>Purpose</span><span>Student top-up loan</span></div>
+      <div class="cert-row"><span>Principal</span><span class="cert-amount">R 750</span></div>
+      <div class="cert-row"><span>Interest</span><span>20% of principal, fixed</span></div>
+      <div class="cert-row"><span>Term</span><span>3 months</span></div>
+      <div class="cert-row"><span>Total repayable</span><span>R 900</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Three steps, from application to payout</h2>
+      <p>A lightweight loan, sized for term-time costs — not a long process to get it.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Apply</h3>
+        <p>Enter your details and the amount you need, between R100 and R1,500.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Verify</h3>
+        <p>Attach a photo of your ID and your NMDS contract so we can confirm who you are.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Get paid out</h3>
+        <p>Once approved, funds are paid out directly to you.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Repay over 3 months</h3>
+        <p>Principal plus 20% interest, split evenly across three monthly repayments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calculate">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Work out your repayment</h2>
+      <p>Move the slider to see what a loan of that size costs over the fixed 3-month term.</p>
+    </div>
+    <div class="calc-panel">
+      <div>
+        <div class="field">
+          <div class="field-label"><strong>Loan amount</strong><span id="amountOut">R 750</span></div>
+          <input type="range" id="amount" min="100" max="1500" step="50" value="750">
+        </div>
+        <p class="calc-note">Fixed interest of 20% of the principal, repaid in three equal monthly instalments. Example: a R500 loan costs R100 in interest, R600 repaid in total.</p>
+      </div>
+      <div class="calc-result">
+        <span class="label">Estimated monthly repayment</span>
+        <span class="value" id="monthlyOut">R 300</span>
+        <div class="sub">
+          <div id="totalOut">Total repaid: R 900</div>
+          <div id="interestOut" style="margin-top:6px;">Total interest: R 150</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="wrap">
+    <div class="section-head" style="max-width:52ch;">
+      <h2 style="color:var(--cream-text);">Funded so far</h2>
+      <p style="color:var(--cream-text-dim);">Illustrative figures — this updates automatically once real loans are recorded in the Stakeholder Portal.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="value" id="statDisbursed">R 0</div><div class="label">Disbursed to students</div></div>
+      <div class="stat"><div class="value" id="statRepaid">R 0</div><div class="label">Repaid so far</div></div>
+      <div class="stat"><div class="value" id="statApps">0</div><div class="label">Applications received</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="testimonial">
+      <blockquote>"I needed R400 to cover the gap before my NMDS payout came through. LoanEX paid out the same week."</blockquote>
+      <cite>Palesa M. — Nursing student, funded 2024</cite>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head"><h2>Questions students ask</h2></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q"><span>What can I borrow?</span><span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Between R100 and R1,500 per loan, repayable over a fixed 3-month term at 20% interest on the principal.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span>What do I need to apply?</span><span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">A clear photo of your ID and a photo of your NMDS contract, plus your institution and contact details.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span>Do I need a co-signer or collateral?</span><span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. Your ID and NMDS contract are used to verify who you are, not as collateral.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q"><span>Is the interest rate fixed?</span><span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. 20% of the principal is added at approval, and your three monthly repayments don't change after that.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="apply" class="apply-section">
+  <div class="wrap">
+    <div class="apply-grid">
+      <div>
+        <h2>Apply for a loan</h2>
+        <p>Fill in your details and attach your documents. You'll get a reference number once it's submitted.</p>
+      </div>
+      <div>
+        <form class="apply-form" id="applyForm">
+          <div class="form-row">
+            <input type="text" id="fName" placeholder="Full name" required>
+            <input type="text" id="fId" placeholder="ID number" required>
+          </div>
+          <div class="form-row">
+            <input type="text" id="fInstitution" placeholder="Institution and course" required>
+            <input type="tel" id="fPhone" placeholder="Phone number" required>
+          </div>
+          <input type="number" id="fAmount" min="100" max="1500" step="50" placeholder="Amount needed (R100 – R1,500)" required>
+
+          <label class="upload-box" id="idUploadBox">
+            <input type="file" id="fIdPhoto" accept="image/*" onchange="handleFile(this,'idPhoto','idThumb')">
+            <span class="upload-placeholder" id="idThumb">ID</span>
+            <span class="upload-text"><strong>ID photo</strong>Clear photo of your ID or passport</span>
+          </label>
+
+          <label class="upload-box" id="contractUploadBox">
+            <input type="file" id="fContractPhoto" accept="image/*" onchange="handleFile(this,'contractPhoto','contractThumb')">
+            <span class="upload-placeholder" id="contractThumb">NMDS</span>
+            <span class="upload-text"><strong>NMDS contract photo</strong>Photo of your NMDS loan contract</span>
+          </label>
+
+          <button type="submit" id="applySubmitBtn">Submit application</button>
+          <p class="form-note">No obligation. A LoanEX stakeholder will review your application and documents before payout.</p>
+        </form>
+        <div class="confirm-box" id="confirmBox" style="display:none;margin-top:18px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>LoanEX</div>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="#apply">Apply</a>
+      <a onclick="openPortal()">Stakeholder Portal</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<!-- ===================== PORTAL ===================== -->
+<div id="portalView">
+
+  <div id="portalLoginScreen">
+    <div class="portal-header">
+      <div class="wrap">
+        <div class="logo" style="color:var(--cream-text);">Loan<span class="r" style="color:var(--gold-light);">EX</span> <span style="font-family:'IBM Plex Sans',sans-serif;font-size:0.7rem;color:var(--cream-text-dim);font-weight:400;">— Stakeholder Portal</span></div>
+      </div>
+    </div>
+    <div class="portal-login">
+      <h2>Sign in</h2>
+      <p>Select your name and enter your PIN. All four stakeholders share one ledger — anything recorded here is visible to everyone.</p>
+      <div class="stakeholder-grid" id="stakeholderGrid"></div>
+      <div class="pin-row" id="pinRow">
+        <label style="font-size:0.85rem;color:var(--cream-text-dim);display:block;margin-bottom:8px;">PIN for <span id="pinName"></span></label>
+        <input type="password" id="pinInput" maxlength="4" inputmode="numeric" placeholder="••••">
+        <div class="pin-error" id="pinError">Incorrect PIN. Try again.</div>
+        <button class="portal-login-btn" onclick="attemptLogin()">Sign in</button>
+      </div>
+      <p style="margin-top:32px;"><a onclick="closePortal()" class="link-quiet" style="color:var(--cream-text-dim);">← Back to site</a></p>
+    </div>
+  </div>
+
+  <div id="portalDashboard" style="display:none;">
+    <div class="portal-header">
+      <div class="wrap">
+        <div class="logo" style="color:var(--cream-text);">Loan<span class="r" style="color:var(--gold-light);">EX</span> <span style="font-family:'IBM Plex Sans',sans-serif;font-size:0.7rem;color:var(--cream-text-dim);font-weight:400;">— Stakeholder Portal</span></div>
+        <div style="display:flex;align-items:center;gap:18px;font-size:0.88rem;color:var(--cream-text-dim);">
+          <span>Signed in as <strong id="loggedInName" style="color:var(--cream-text);"></strong></span>
+          <a onclick="logout()" class="link-quiet" style="color:var(--cream-text-dim);">Sign out</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap portal-body">
+      <div class="portal-summary">
+        <div class="summary-cell"><div class="label">Total disbursed</div><div class="value" id="sumDisbursed">R 0</div></div>
+        <div class="summary-cell"><div class="label">Total repaid</div><div class="value" id="sumRepaid">R 0</div></div>
+        <div class="summary-cell"><div class="label">Outstanding</div><div class="value" id="sumOutstanding">R 0</div></div>
+        <div class="summary-cell"><div class="label">Applications on file</div><div class="value" id="sumApps">0</div></div>
+      </div>
+
+      <div class="portal-grid">
+        <div>
+          <div class="panel" style="margin-bottom:32px;">
+            <h3>Record money movement</h3>
+            <form class="ledger-form" id="ledgerForm">
+              <div>
+                <label>Type</label>
+                <select id="txType"><option value="disbursement">Disbursement (loan paid out)</option><option value="repayment">Repayment (received)</option></select>
+              </div>
+              <div>
+                <label>Applicant name</label>
+                <input type="text" id="txApplicant" placeholder="e.g. Palesa M." required list="applicantList">
+                <datalist id="applicantList"></datalist>
+              </div>
+              <div>
+                <label>Amount (R)</label>
+                <input type="number" id="txAmount" min="1" step="1" required>
+              </div>
+              <div>
+                <label>Note (optional)</label>
+                <input type="text" id="txNote" placeholder="e.g. Month 1 of 3">
+              </div>
+              <button type="submit" id="txSubmitBtn">Add to ledger</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h3>Applications received (<span id="appsCount">0</span>)</h3>
+            <div id="appsList"><div class="empty-row">No applications yet.</div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Ledger — all recorded transactions</h3>
+          <table class="ledger-table">
+            <thead><tr><th>Date</th><th>Type</th><th>Applicant</th><th>Amount</th><th>Recorded by</th><th>Note</th></tr></thead>
+            <tbody id="ledgerBody"><tr><td colspan="6" class="empty-row">No transactions recorded yet.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg" src=""></div>
+
+<script>
+/* ---------------- Repayment calculator (marketing page) ---------------- */
+const RATE = 0.20; // 20% flat over the 3-month term
+const TERM_MONTHS = 3;
+const amountEl = document.getElementById('amount');
+const amountOut = document.getElementById('amountOut');
+const monthlyOut = document.getElementById('monthlyOut');
+const totalOut = document.getElementById('totalOut');
+const interestOut = document.getElementById('interestOut');
+function fmt(n){ return 'R ' + Math.round(n).toLocaleString('en-ZA'); }
+function recalcCalc(){
+  const P = parseFloat(amountEl.value);
+  const interest = P * RATE;
+  const total = P + interest;
+  const monthly = total / TERM_MONTHS;
+  amountOut.textContent = fmt(P);
+  monthlyOut.textContent = fmt(monthly);
+  totalOut.textContent = 'Total repaid: ' + fmt(total);
+  interestOut.textContent = 'Total interest: ' + fmt(interest);
+}
+amountEl.addEventListener('input', recalcCalc);
+recalcCalc();
+
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if(!wasOpen) item.classList.add('open');
+  });
+});
+
+/* ---------------- File handling for application uploads ---------------- */
+const pendingFiles = {}; // idPhoto / contractPhoto -> base64 string
+
+function compressImage(file, maxWidth, quality){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Could not load image'));
+      img.onload = () => {
+        const scale = Math.min(1, maxWidth / img.width);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFile(input, key, thumbId){
+  const file = input.files[0];
+  if(!file) return;
+  const thumbEl = document.getElementById(thumbId);
+  thumbEl.textContent = '…';
+  try{
+    const dataUrl = await compressImage(file, 700, 0.6);
+    pendingFiles[key] = dataUrl;
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    img.className = 'upload-thumb';
+    thumbEl.replaceWith(img);
+    img.id = thumbId;
+  }catch(err){
+    console.error(err);
+    thumbEl.textContent = '!';
+    alert('Could not process that image — try a different photo.');
+  }
+}
+
+/* ---------------- Storage helpers ---------------- */
+async function loadApplications(){
+  try{
+    const res = await window.storage.get('applications:all', true);
+    return res ? JSON.parse(res.value) : [];
+  }catch(e){ return []; }
+}
+async function saveApplications(list){
+  try{
+    const res = await window.storage.set('applications:all', JSON.stringify(list), true);
+    return !!res;
+  }catch(e){ console.error(e); return false; }
+}
+async function loadLedger(){
+  try{
+    const res = await window.storage.get('ledger:transactions', true);
+    return res ? JSON.parse(res.value) : [];
+  }catch(e){ return []; }
+}
+async function saveLedger(list){
+  try{
+    const res = await window.storage.set('ledger:transactions', JSON.stringify(list), true);
+    return !!res;
+  }catch(e){ console.error(e); return false; }
+}
+
+/* ---------------- Application form submit ---------------- */
+document.getElementById('applyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('applySubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  try{
+    const amount = parseFloat(document.getElementById('fAmount').value);
+    if(amount < 100 || amount > 1500){
+      alert('Loan amount must be between R100 and R1,500.');
+      btn.disabled = false; btn.textContent = 'Submit application';
+      return;
+    }
+    const app = {
+      id: 'APP-' + Date.now().toString().slice(-8),
+      name: document.getElementById('fName').value,
+      idNumber: document.getElementById('fId').value,
+      institution: document.getElementById('fInstitution').value,
+      phone: document.getElementById('fPhone').value,
+      amount: amount,
+      date: new Date().toISOString(),
+      idPhoto: pendingFiles.idPhoto || null,
+      contractPhoto: pendingFiles.contractPhoto || null,
+      status: 'pending'
+    };
+    const list = await loadApplications();
+    list.push(app);
+    const ok = await saveApplications(list);
+    const box = document.getElementById('confirmBox');
+    box.style.display = 'block';
+    if(ok){
+      box.innerHTML = '<strong>Application received.</strong><br>Reference: ' + app.id + '<br>A LoanEX stakeholder will review your documents shortly.';
+      document.getElementById('applyForm').reset();
+      document.querySelectorAll('.upload-thumb').forEach(el => {
+        const ph = document.createElement('span');
+        ph.className = 'upload-placeholder';
+        ph.id = el.id;
+        ph.textContent = el.id === 'idThumb' ? 'ID' : 'NMDS';
+        el.replaceWith(ph);
+      });
+      pendingFiles.idPhoto = null;
+      pendingFiles.contractPhoto = null;
+    } else {
+      box.innerHTML = 'Something went wrong saving your application. Please try again.';
+    }
+  }catch(err){
+    console.error(err);
+    alert('Something went wrong. Please try again.');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'Submit application';
+  }
+});
+
+/* ---------------- Public stats ---------------- */
+async function refreshPublicStats(){
+  const [apps, ledger] = await Promise.all([loadApplications(), loadLedger()]);
+  const disbursed = ledger.filter(t => t.type === 'disbursement').reduce((s,t)=>s+t.amount,0);
+  const repaid = ledger.filter(t => t.type === 'repayment').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('statDisbursed').textContent = fmt(disbursed);
+  document.getElementById('statRepaid').textContent = fmt(repaid);
+  document.getElementById('statApps').textContent = apps.length;
+}
+refreshPublicStats();
+
+/* ---------------- Portal: auth (demo-only, not secure) ---------------- */
+// Placeholder names & PINs — rename stakeholders and change PINs before real use.
+const STAKEHOLDERS = [
+  { name: 'Stakeholder 1', pin: '1111' },
+  { name: 'Stakeholder 2', pin: '2222' },
+  { name: 'Stakeholder 3', pin: '3333' },
+  { name: 'Stakeholder 4', pin: '4444' }
+];
+let selectedStakeholder = null;
+let currentUser = null;
+
+function renderStakeholderGrid(){
+  const grid = document.getElementById('stakeholderGrid');
+  grid.innerHTML = '';
+  STAKEHOLDERS.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'stakeholder-btn';
+    b.textContent = s.name;
+    b.onclick = () => {
+      document.querySelectorAll('.stakeholder-btn').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+      selectedStakeholder = s;
+      document.getElementById('pinName').textContent = s.name;
+      document.getElementById('pinRow').classList.add('show');
+      document.getElementById('pinError').style.display = 'none';
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinInput').focus();
+    };
+    grid.appendChild(b);
+  });
+}
+renderStakeholderGrid();
+
+function attemptLogin(){
+  if(!selectedStakeholder) return;
+  const val = document.getElementById('pinInput').value;
+  if(val === selectedStakeholder.pin){
+    currentUser = selectedStakeholder.name;
+    document.getElementById('loggedInName').textContent = currentUser;
+    document.getElementById('portalLoginScreen').style.display = 'none';
+    document.getElementById('portalDashboard').style.display = 'block';
+    refreshDashboard();
+  } else {
+    document.getElementById('pinError').style.display = 'block';
+  }
+}
+document.getElementById('pinInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') attemptLogin(); });
+
+function logout(){
+  currentUser = null;
+  selectedStakeholder = null;
+  document.getElementById('portalDashboard').style.display = 'none';
+  document.getElementById('portalLoginScreen').style.display = 'block';
+  document.querySelectorAll('.stakeholder-btn').forEach(x=>x.classList.remove('selected'));
+  document.getElementById('pinRow').classList.remove('show');
+}
+
+function openPortal(){
+  document.getElementById('siteView').style.display = 'none';
+  document.getElementById('portalView').style.display = 'block';
+  window.scrollTo(0,0);
+}
+function closePortal(){
+  document.getElementById('portalView').style.display = 'none';
+  document.getElementById('siteView').style.display = 'block';
+}
+
+/* ---------------- Portal: dashboard data ---------------- */
+async function refreshDashboard(){
+  const [apps, ledger] = await Promise.all([loadApplications(), loadLedger()]);
+  renderSummary(apps, ledger);
+  renderApps(apps);
+  renderLedger(ledger);
+  const datalist = document.getElementById('applicantList');
+  datalist.innerHTML = apps.map(a => '<option value="' + escapeHtml(a.name) + '">').join('');
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
+}
+
+function renderSummary(apps, ledger){
+  const disbursed = ledger.filter(t=>t.type==='disbursement').reduce((s,t)=>s+t.amount,0);
+  const repaid = ledger.filter(t=>t.type==='repayment').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('sumDisbursed').textContent = fmt(disbursed);
+  document.getElementById('sumRepaid').textContent = fmt(repaid);
+  document.getElementById('sumOutstanding').textContent = fmt(disbursed - repaid);
+  document.getElementById('sumApps').textContent = apps.length;
+}
+
+function renderApps(apps){
+  const wrap = document.getElementById('appsList');
+  document.getElementById('appsCount').textContent = apps.length;
+  if(apps.length === 0){ wrap.innerHTML = '<div class="empty-row">No applications yet.</div>'; return; }
+  wrap.innerHTML = apps.slice().reverse().map(a => `
+    <div class="app-card">
+      <div class="app-card-top"><strong>${escapeHtml(a.name)}</strong><span>${fmt(a.amount)}</span></div>
+      <div class="app-card-meta">${escapeHtml(a.institution)} · ${escapeHtml(a.phone)} · ID ${escapeHtml(a.idNumber)}</div>
+      <div class="app-card-meta">Ref ${a.id} · ${new Date(a.date).toLocaleDateString('en-ZA')}</div>
+      <div class="app-card-docs">
+        ${a.idPhoto ? `<img src="${a.idPhoto}" onclick="showLightbox('${a.id}-id')">` : '<div class="doc-missing">No ID photo</div>'}
+        ${a.contractPhoto ? `<img src="${a.contractPhoto}" onclick="showLightbox('${a.id}-contract')">` : '<div class="doc-missing">No NMDS photo</div>'}
+      </div>
+    </div>
+  `).join('');
+  window._appsCache = apps;
+}
+
+function showLightbox(refKey){
+  const [id, kind] = refKey.split(/-(id|contract)$/).filter(Boolean);
+  const app = (window._appsCache || []).find(a => a.id === id);
+  if(!app) return;
+  const src = kind === 'id' ? app.idPhoto : app.contractPhoto;
+  if(!src) return;
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function renderLedger(ledger){
+  const body = document.getElementById('ledgerBody');
+  if(ledger.length === 0){ body.innerHTML = '<tr><td colspan="6" class="empty-row">No transactions recorded yet.</td></tr>'; return; }
+  body.innerHTML = ledger.slice().reverse().map(t => `
+    <tr>
+      <td>${new Date(t.date).toLocaleDateString('en-ZA')}</td>
+      <td><span class="tag ${t.type==='disbursement'?'disb':'repay'}">${t.type==='disbursement'?'Disbursed':'Repaid'}</span></td>
+      <td>${escapeHtml(t.applicant)}</td>
+      <td>${fmt(t.amount)}</td>
+      <td>${escapeHtml(t.enteredBy)}</td>
+      <td>${escapeHtml(t.note || '')}</td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('ledgerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('txSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try{
+    const tx = {
+      id: 'TX-' + Date.now().toString().slice(-8),
+      type: document.getElementById('txType').value,
+      applicant: document.getElementById('txApplicant').value,
+      amount: parseFloat(document.getElementById('txAmount').value),
+      note: document.getElementById('txNote').value,
+      enteredBy: currentUser,
+      date: new Date().toISOString()
+    };
+    const ledger = await loadLedger();
+    ledger.push(tx);
+    const ok = await saveLedger(ledger);
+    if(ok){
+      document.getElementById('ledgerForm').reset();
+      await refreshDashboard();
+    } else {
+      alert('Could not save this transaction. Please try again.');
+    }
+  }catch(err){
+    console.error(err);
+    alert('Something went wrong recording that transaction.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Add to ledger';
+  }
+});
+</script>
+
+</body>
+</html>
